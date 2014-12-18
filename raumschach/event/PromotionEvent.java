@@ -1,7 +1,7 @@
 package raumschach.event;
 
 public class PromotionEvent extends MoveEvent {
-	private byte promotionType;
+	protected byte promotionType;
 
 	public PromotionEvent (
 		int eventType, long time, boolean color,

@@ -1,7 +1,7 @@
 package raumschach.event;
 
 public class PlayerEvent extends GameEvent {
-	private boolean color;
+	protected boolean color;
 
 	public PlayerEvent (int eventType, long time, boolean color) throws Exception {
 		super(eventType, time);

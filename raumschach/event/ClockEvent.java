@@ -1,8 +1,8 @@
 package raumschach.event;
 
 public class ClockEvent extends PlayerEvent {
-	private long timeleft;
-	private boolean running;
+	protected long timeleft;
+	protected boolean running;
 
 	public ClockEvent (
 		int eventType, long time, boolean color,

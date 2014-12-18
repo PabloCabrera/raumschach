@@ -27,8 +27,8 @@ public class GameEvent {
 
 
 	/* Members */
-	private int eventType;
-	private long time;
+	protected int eventType;
+	protected long time;
 
 	public GameEvent (int eventType, long time) {
 		this.eventType = eventType;

@@ -2,6 +2,7 @@ package raumschach.view;
 import raumschach.event.GameEvent;
 import raumschach.event.PlayerEvent;
 import raumschach.event.PieceEvent;
+import raumschach.event.MoveEvent;
 import raumschach.event.ClockEvent;
 import raumschach.game.Piece;
 
@@ -31,7 +32,11 @@ public class TextView implements RaumschachView {
 		}
 
 		if (event instanceof PieceEvent) {
-			
+			origin = ((PieceEvent) event).getPiecePositionAsString ();
+		}
+
+		if (event instanceof MoveEvent) {
+			destination = ((MoveEvent) event).getDestinationAsString ();
 		}
 
 
@@ -90,7 +95,7 @@ public class TextView implements RaumschachView {
 				break; 
 
 			case GameEvent.MOVE:
-				System.out.println (color + "moves " +
+				System.out.println (color + " moves from " +
 					origin + " to " + destination);
 				break; 
 

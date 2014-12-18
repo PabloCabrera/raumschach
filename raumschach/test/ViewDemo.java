@@ -1,5 +1,6 @@
 package raumschach.test;
 import raumschach.view.RaumschachView;
+import raumschach.view.UnicodeView;
 import raumschach.view.TextView;
 import raumschach.game.Piece;
 import raumschach.event.GameEvent;
@@ -19,7 +20,7 @@ public class ViewDemo {
 	private int step;
 	private long roundTime = 1800000l;
 	private int[] whitestart = {0, 2, 0};
-	private int[] blackstart = {4, 2, 0};
+	private int[] blackstart = {4, 2, 4};
 	private int[][][] moves = {
 	/* White moves */
 	{
@@ -38,9 +39,9 @@ public class ViewDemo {
 	},
 	/* Black moves */
 	{
-		{4, 2, 0},
-		{3, 2, 0},
-		{2, 1, 0},
+		{4, 2, 4},
+		{3, 2, 3},
+		{2, 1, 2},
 		{3, 2, 1},
 		{3, 3, 2},
 		{3, 3, 3},
@@ -54,9 +55,10 @@ public class ViewDemo {
 
 	public static void main (String args[]) {
 		ViewDemo demo;
-		RaumschachView view;
+		RaumschachView view = null;
 
 		try {
+			//view = new UnicodeView ();
 			view = new TextView ();
 			demo = new ViewDemo (view);
 		} catch (Exception e) {
