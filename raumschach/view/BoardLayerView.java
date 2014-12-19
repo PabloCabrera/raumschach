@@ -48,49 +48,72 @@ class BoardLayerView extends JPanel {
 	}
 
 	public void drawPieces (Graphics g) {
-		for (int x = 0; x < 5; x++) {
-			for (int y = 0; y < 5; y++) {
-				float pieceZ;
-				Object3d obj;
+		Object3d obj;
 
-				obj = this.board[this.layer][x][y];
-				if (obj != null && !obj.isMoving ())
-					this.drawObject3d (g, obj);
+		for (int z = 0; z < 5; z++) {
+			for (int x = 0; x < 5; x++) {
+				for (int y = 0; y < 5; y++) {
+					obj = this.board[z][x][y];
+					if (obj != null) {
+						if (obj.isMoving ()) {
+							this.drawMoving (g, obj);
+						} else if (z == this.layer) {
+							this.drawStatic (g, obj);
+						}
+					}
+				}
 			}
 		}
 	}
 
-	public void drawObject3d (Graphics g, Object3d obj) {
-		BufferedImage imgt = null;
-		float alpha; 
+	public void drawStatic (Graphics g, Object3d obj) {
 		int destX;
 		int destY;
 		float[] position;
 
 		position = obj.getPosition ();
-		alpha = 1 - Math.abs ((position[0] - (float) this.layer));
-		if (alpha > 0.02) {
-			imgt = makeImageTranslucent (obj.getImage2D (), alpha);
-			if (obj.isMoving ()) {
-				float[] previousPos = obj.getPreviousPos ();
-				long duration = obj.getDuration ();
-				long startTime = obj.getStartTime ();
-				long now = (new Date ()).getTime ();
-				float completed;
+		destX = (int) (position[1] * (float) BoardLayerView.CELL_WIDTH);
+		destY = (int) ((4 - position[2]) * (float) BoardLayerView.CELL_HEIGHT);
+		g.drawImage(obj.getImage2D (),destX, destY, null);
+	}
 
-				completed = (((float)(now - startTime)) / (float)duration);
-				if (completed > 1) {
-					completed = 1;
-					obj.update ();
-				}
-				destX = (int) ((position[1] + (completed * (position[1] - previousPos[1]))) * (float) BoardLayerView.CELL_WIDTH);
-				destY = (int) ((4f - (position[2] + (completed * (position[2] - previousPos[2])))) * (float) BoardLayerView.CELL_HEIGHT);
-			} else {
-				destX = (int) (position[1] * (float) BoardLayerView.CELL_WIDTH);
-				destY = (int) ((4 - position[2]) * (float) BoardLayerView.CELL_HEIGHT);
-			}
-			g.drawImage(imgt,destX, destY, null);
+	public void drawMoving (Graphics g, Object3d obj) {
+		float currentX;
+		float currentY;
+		float currentZ;
+		float[] origin;
+		float[] destination;
+		long startTime;
+		long duration;
+		float completed;
+		long now;
+		float zDiff;
+
+		destination = obj.getPosition ();
+		origin = obj.getPreviousPos ();
+		startTime = obj.getStartTime ();
+		duration = obj.getDuration ();
+		now = (new Date ()).getTime ();
+		completed = ((float) (now - startTime)) / ((float) duration);
+		if (completed > 1f) {
+			obj.update ();
+			completed = 1f;
 		}
+		currentZ = origin[0] + completed * (destination[0] - origin[0]);
+		zDiff = Math.abs (currentZ - (float) this.layer);
+		if (zDiff < 0.96) {
+			int destX;
+			int destY;
+			BufferedImage imgt;
+
+			imgt = this.makeImageTranslucent (obj.getImage2D (), 1-zDiff);
+			currentX = origin[1] + completed * (destination[1] - origin[1]);
+			currentY = origin[2] + completed * (destination[2] - origin[2]);
+			destX = (int) (currentX * (float) BoardLayerView.CELL_WIDTH);
+			destY = (int) ((4 - currentY) * (float) BoardLayerView.CELL_HEIGHT);
+			g.drawImage(imgt, destX, destY, null);
+		}
+
 	}
 
 	public void drawIndicators () {

@@ -12,7 +12,7 @@ import javax.swing.BoxLayout;
 public class GraphicView implements RaumschachView {
 
 	static String imagePath = "../res/";
-	static long MOVE_DURATION = 300;
+	static long MOVE_DURATION = 800;
 
 	private Object3d[][][] board;
 	private JFrame window;
