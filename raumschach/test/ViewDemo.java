@@ -2,6 +2,7 @@ package raumschach.test;
 import raumschach.view.RaumschachView;
 import raumschach.view.UnicodeView;
 import raumschach.view.TextView;
+import raumschach.view.GraphicView;
 import raumschach.game.Piece;
 import raumschach.event.GameEvent;
 import raumschach.event.PieceEvent;
@@ -59,7 +60,8 @@ public class ViewDemo {
 
 		try {
 			//view = new UnicodeView ();
-			view = new TextView ();
+			//view = new TextView ();
+			view = new GraphicView ();
 			demo = new ViewDemo (view);
 		} catch (Exception e) {
 			System.out.println ("Exception: " + e.getMessage ());
@@ -103,8 +105,8 @@ public class ViewDemo {
 		GameEvent event;
 		TimerTask task;
 
-		prevPos = this.moves[player][step];
-		nextPos = this.moves[player][step+1];
+		prevPos = this.moves[player][step-1];
+		nextPos = this.moves[player][step];
 		time = 2000 * (step * 2 + player + 1);
 		color = (player == 0)? Piece.WHITE: Piece.BLACK;
 		try {
