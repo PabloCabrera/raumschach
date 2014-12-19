@@ -22,6 +22,8 @@ public class ViewDemo {
 	private long roundTime = 1800000l;
 	private int[] whitestart = {0, 2, 0};
 	private int[] blackstart = {4, 2, 4};
+	private int[] rookstart = {0, 0, 0};
+	private int[] rookend = {4, 0, 0};
 	private int[][][] moves = {
 	/* White moves */
 	{
@@ -82,6 +84,7 @@ public class ViewDemo {
 			Piece.KING, whitestart);
 		this.view.handleEvent (event);
 
+
 		/* Game Starts! */
 		event = new GameEvent (GameEvent.START, 0l);
 
@@ -95,6 +98,14 @@ public class ViewDemo {
 			this.commandClock (step, 1);
 			this.commandTurn (step, 0);
 		}
+
+		/* Rook */
+		event = new PieceEvent (GameEvent.APPEAR, 0l, Piece.WHITE,
+			Piece.ROOK, rookstart);
+		this.view.handleEvent (event);
+
+		event = new MoveEvent (GameEvent.MOVE, 2000, Piece.WHITE, Piece.ROOK,  rookstart, rookend);
+		this.view.handleEvent (event);
 	}
 
 	private void commandMove (int step, int player) {

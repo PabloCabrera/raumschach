@@ -66,8 +66,30 @@ class Object3d {
 	}
 
 	public BufferedImage getImage2D () {
-		/* WRITE! */
+		/* MUST BE OVERRIDED! */
 		return null;
 	}
+
+	public BufferedImage get3DSet () {
+		/* MUST BE OVERRIDED! */
+		return null;
+	}
+
+	public int getSpriteAngles () {
+		/* MUST BE OVERRIDED! */
+		return 0;
+	}
+
+	public int getSpriteWidth () {
+		/* MUST BE OVERRIDED! */
+		return 0;
+	}
+
+	public int getSpriteHeight () {
+		/* MUST BE OVERRIDED! */
+		return 0;
+	}
+
+
 }
 

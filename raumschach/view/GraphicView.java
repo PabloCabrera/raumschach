@@ -3,6 +3,7 @@ import raumschach.event.GameEvent;
 import raumschach.event.PieceEvent;
 import raumschach.event.MoveEvent;
 import java.lang.Thread;
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -69,9 +70,9 @@ public class GraphicView implements RaumschachView {
 		this.board = new Object3d[5][5][5];
 		this.window = new JFrame ("Raumschach");
 		this.window.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
-		this.window.getContentPane().setLayout (new BoxLayout (this.window.getContentPane(), BoxLayout.X_AXIS));
+		this.window.getContentPane().setLayout (new BorderLayout (8, 8));
 		this.planes = new BoardLayerView[5];
-		this.proj3d = new JPanel ();
+		this.proj3d = new Board3dView (this.board);
 		this.proj3d.setSize (500, 500);
 
 		planesContainer = new JPanel ();
@@ -82,10 +83,11 @@ public class GraphicView implements RaumschachView {
 			this.planes[i].setSize (100,100);
 			planesContainer.add (this.planes[i]);
 		}
-		this.window.add (planesContainer);
-		this.window.add (this.proj3d);
+		this.window.add (planesContainer, BorderLayout.WEST);
+		this.window.add (this.proj3d, BorderLayout.CENTER);
 
 		this.window.pack ();
+		this.window.setSize (800, 600);
 		this.window.setVisible (true);
 
 		this.repainter = new Repainter (this.planes);
