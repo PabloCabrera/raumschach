@@ -4,12 +4,14 @@ import java.util.Date;
 
 class Repainter extends Thread {
 	private BoardLayerView[] planes;
+	private Board3dView proj3d;
 	private long lastIteration = 0;
 	private long minWait = 40;
 	private boolean stop = false;
 
-	public Repainter (BoardLayerView[] planes) {
+	public Repainter (BoardLayerView[] planes, Board3dView proj3d) {
 		this.planes = planes;
+		this.proj3d = proj3d;
 	}
 
 	@Override
@@ -24,8 +26,9 @@ class Repainter extends Thread {
 				} catch (Exception e) {}
 			}
 			for (int i=0; i < this.planes.length; i++) {
-				planes[i].repaint();
+				this.planes[i].repaint ();
 			}
+			this.proj3d.repaint ();
 		}
 	}
 }

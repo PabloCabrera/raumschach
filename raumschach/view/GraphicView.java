@@ -18,7 +18,7 @@ public class GraphicView implements RaumschachView {
 	private Object3d[][][] board;
 	private JFrame window;
 	private BoardLayerView[] planes;
-	private JPanel proj3d;
+	private Board3dView proj3d;
 	private Repainter repainter;
 
 	@Override
@@ -90,7 +90,7 @@ public class GraphicView implements RaumschachView {
 		this.window.setSize (800, 600);
 		this.window.setVisible (true);
 
-		this.repainter = new Repainter (this.planes);
+		this.repainter = new Repainter (this.planes, this.proj3d);
 		this.repainter.start ();
 	}
 

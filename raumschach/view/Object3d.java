@@ -3,6 +3,7 @@ import raumschach.event.GameEvent;
 import java.util.Date;
 import java.util.Timer;
 import java.awt.image.BufferedImage;
+import java.awt.Image;
 
 class Object3d {
 	private float[] position = null;
@@ -109,6 +110,28 @@ class Object3d {
 		/* MUST BE OVERRIDED! */
 		return 0;
 	}
+
+	public Image getScaledImage (int height, double angle) {
+		BufferedImage tmp;
+		BufferedImage scaled = null;
+		int index;
+		int offset;
+
+		while (angle < 0) {
+			angle += (2 * Math.PI);
+		}
+
+		while (angle > 2 * Math.PI) {
+			angle -= (2 * Math.PI);
+		}
+
+		index = (int) (((double)(angle * this.getSpriteAngles ())) / Math.PI);
+		offset = this.getSpriteWidth () * index;
+		tmp = this.get3DSet().getSubimage (offset, 0, this.getSpriteWidth (), this.getSpriteHeight());
+
+		return tmp.getScaledInstance ((Piece3d.SPRITE3D_WIDTH*height)/Piece3d.SPRITE3D_HEIGHT, height, Image.SCALE_FAST);
+	}
+
 
 
 }
