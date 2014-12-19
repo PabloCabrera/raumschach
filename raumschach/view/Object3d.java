@@ -49,6 +49,26 @@ class Object3d {
 		return this.position;
 	}
 
+	public float[] getActualPosition (long time) {
+		if (this.moving) {
+			if (time <= this.startTime) {
+				return this.previousPos;
+			} else if (time >= this.startTime + this.duration) {
+				this.update ();
+				return this.position;
+			} else {
+				float[] actual = new float[3];
+				float completed = ((float) (time - this.startTime)) / ((float) this.duration);
+				for (int i = 0; i < 3; i++) {
+					actual[i] = this.previousPos[i] + completed * (this.position[i] - this.previousPos[i]);
+				}
+			return actual;
+			} 
+		} else {
+			return this.position;
+		}
+	}
+
 	public boolean isMoving () {
 		return this.moving;
 	}

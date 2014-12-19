@@ -60,6 +60,7 @@ class BoardLayerView extends JPanel {
 
 	public void drawPieces (Graphics g) {
 		Object3d obj;
+		long now = (new Date ()).getTime ();
 
 		for (int z = 0; z < 5; z++) {
 			for (int x = 0; x < 5; x++) {
@@ -67,7 +68,7 @@ class BoardLayerView extends JPanel {
 					obj = this.board[z][x][y];
 					if (obj != null) {
 						if (obj.isMoving ()) {
-							this.drawMoving (g, obj);
+							this.drawMoving (g, obj, now);
 						} else if (z == this.layer) {
 							this.drawStatic (g, obj);
 						}
@@ -91,40 +92,20 @@ class BoardLayerView extends JPanel {
 		}
 	}
 
-	public void drawMoving (Graphics g, Object3d obj) {
-		float currentX;
-		float currentY;
-		float currentZ;
-		float[] origin;
-		float[] destination;
-		long startTime;
-		long duration;
-		float completed;
-		long now;
+	public void drawMoving (Graphics g, Object3d obj, long now) {
+		float[] actualPos;
 		float zDiff;
 
-		destination = obj.getPosition ();
-		origin = obj.getPreviousPos ();
-		startTime = obj.getStartTime ();
-		duration = obj.getDuration ();
-		now = (new Date ()).getTime ();
-		completed = ((float) (now - startTime)) / ((float) duration);
-		if (completed > 1f) {
-			obj.update ();
-			completed = 1f;
-		}
-		currentZ = origin[0] + completed * (destination[0] - origin[0]);
-		zDiff = Math.abs (currentZ - (float) this.layer);
+		actualPos = obj.getActualPosition (now);
+		zDiff = Math.abs (actualPos[0] - (float) this.layer);
 		if (zDiff < 0.96) {
 			int destX;
 			int destY;
 			BufferedImage imgt;
 
 			imgt = this.makeImageTranslucent (obj.getImage2D (), 1-zDiff);
-			currentX = origin[1] + completed * (destination[1] - origin[1]);
-			currentY = origin[2] + completed * (destination[2] - origin[2]);
-			destX = (int) (currentX * (float) BoardLayerView.CELL_WIDTH);
-			destY = (int) ((4 - currentY) * (float) BoardLayerView.CELL_HEIGHT);
+			destX = (int) (actualPos[1] * (float) BoardLayerView.CELL_WIDTH);
+			destY = (int) ((4 - actualPos[2]) * (float) BoardLayerView.CELL_HEIGHT);
 			g.drawImage(imgt, destX, destY, null);
 		}
 
