@@ -2,6 +2,7 @@ package raumschach.view;
 import raumschach.event.GameEvent;
 import raumschach.event.PieceEvent;
 import raumschach.event.MoveEvent;
+import raumschach.event.RaumschachEventHandler;
 import java.lang.Thread;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -10,7 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.BoxLayout;
 
-public class GraphicView implements RaumschachView {
+public class GraphicView implements RaumschachEventHandler {
 
 	static String imagePath = "../res/";
 	static long MOVE_DURATION = 800;

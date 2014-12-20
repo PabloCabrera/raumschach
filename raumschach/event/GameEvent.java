@@ -1,6 +1,7 @@
 package raumschach.event;
 
 public class GameEvent {
+
 	/* Game scope */
 	public final static int START = 1;
 	public final static int PAUSE = 2;
@@ -24,6 +25,9 @@ public class GameEvent {
 	public final static int MOVE = 35;
 	public final static int CAPTURE = 36;
 	public final static int PROMOTION = 37;
+
+	/* Invalid event (should be ignored) */
+	public final static int EVENT_INVALID = -1;
 
 
 	/* Members */

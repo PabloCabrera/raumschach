@@ -4,9 +4,10 @@ import raumschach.event.PlayerEvent;
 import raumschach.event.PieceEvent;
 import raumschach.event.MoveEvent;
 import raumschach.event.ClockEvent;
+import raumschach.event.RaumschachEventHandler;
 import raumschach.game.Piece;
 
-public class TextView implements RaumschachView {
+public class TextView implements RaumschachEventHandler {
 	public TextView () {
 	}
 

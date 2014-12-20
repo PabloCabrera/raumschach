@@ -55,9 +55,23 @@ public class Board {
 		}
 	}
 
+	public boolean move (int[] from, int[] to) {
+		return this.move (from[0], from[1], from[2], to[0], to[1], to[2]);
+	}
+
 	public boolean capture (int fromZ, int fromX, int fromY,
 		int toZ, int toX, int toY) {
+		Piece piece;
+
+		piece = this.getPieceAt (fromZ, fromX, fromY);
+		if ((piece != null) && (piece.isValidCapture (toZ, toX, toY))) {
+			return this.forceCapture (fromZ, fromX, fromY, toZ, toX, toY);
+		}
 		return false;
+	}
+
+	public boolean capture (int[] from, int[] to) {
+		return this.capture (from[0], from[1], from[2], to[0], to[1], to[2]);
 	}
 
 	public boolean forceMove (int fromZ, int fromX, int fromY,
@@ -75,7 +89,16 @@ public class Board {
 
 	public boolean forceCapture (int fromZ, int fromX, int fromY,
 		int toZ, int toX, int toY) {
-		/* captura una pieza aunque el movimiento no sea valida */
+
+		Piece p1 = this.cells[fromZ][fromX][fromY];
+		Piece p2 = this.cells[toZ][toX][toY]; 
+
+		if  ((p1 != null) && (p2 != null)) {
+			this.cells[toZ][toX][toY] = this.cells[fromZ][fromX][fromY];
+			this.cells[fromZ][fromX][fromY] = null;
+			return true;
+		}
+
 		return false;
 	}
 

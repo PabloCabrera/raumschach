@@ -7,12 +7,12 @@ public class MoveEvent extends PieceEvent {
 		int eventType, long time, boolean color,
 		byte pieceType, int[] origin,
 		int[] destination
-	) throws Exception {
+	) {
 		super (eventType, time, color, pieceType, origin);
 		this.destination = destination;
 
 		if (eventType < MOVE) {
-			throw new Exception ("Invalid event type for Move Event");
+			this.eventType = EVENT_INVALID;
 		}
 	}
 

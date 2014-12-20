@@ -7,9 +7,12 @@ public class PromotionEvent extends MoveEvent {
 		int eventType, long time, boolean color,
 		byte pieceType, int[] origin,
 		int[] destination, byte promotionType
-	) throws Exception {
+	) {
 		super (eventType, time, color, pieceType, origin, destination);
 		this.promotionType = promotionType;
+		if (eventType != PROMOTION) {
+			this.eventType = EVENT_INVALID;
+		}
 	}
 
 	public byte getPromotionType () {

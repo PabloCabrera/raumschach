@@ -56,6 +56,10 @@ public abstract class Piece {
 		return false;
 	}
 
+	public boolean isValidMove (int[] destination) {
+		return this.isValidMove (destination[0], destination[1], destination[2]);
+	}
+
 	public boolean isValidCapture (int z, int x, int y) {
 		int[] position;
 		ArrayList<int[]> validCaptures;
@@ -71,6 +75,10 @@ public abstract class Piece {
 			}
 		}
 		return false;
+	}
+
+	public boolean isValidCapture (int[] destination) {
+		return this.isValidCapture (destination[0], destination[1], destination[2]);
 	}
 
 	public int[] getPosition () {

@@ -1,6 +1,4 @@
 package raumschach.test;
-import raumschach.view.RaumschachView;
-import raumschach.view.UnicodeView;
 import raumschach.view.TextView;
 import raumschach.view.GraphicView;
 import raumschach.game.Piece;
@@ -9,12 +7,13 @@ import raumschach.event.PieceEvent;
 import raumschach.event.MoveEvent;
 import raumschach.event.ClockEvent;
 import raumschach.event.PlayerEvent;
+import raumschach.event.RaumschachEventHandler;
 import java.util.Timer;
 import java.util.TimerTask;
 
 
 public class ViewDemo {
-	private RaumschachView view;
+	private RaumschachEventHandler view;
 	private int turn = 0;
 	private Timer timer;
 	private TimerTask task;
@@ -58,10 +57,9 @@ public class ViewDemo {
 
 	public static void main (String args[]) {
 		ViewDemo demo;
-		RaumschachView view = null;
+		RaumschachEventHandler view = null;
 
 		try {
-			//view = new UnicodeView ();
 			//view = new TextView ();
 			view = new GraphicView ();
 			demo = new ViewDemo (view);
@@ -70,7 +68,7 @@ public class ViewDemo {
 		}
 	}
 
-	public ViewDemo (RaumschachView view) throws Exception {
+	public ViewDemo (RaumschachEventHandler view) throws Exception {
 		GameEvent event;
 
 		this.view = view;
@@ -179,9 +177,9 @@ public class ViewDemo {
 
 class TimedEvent extends TimerTask {
 	private GameEvent event;
-	private RaumschachView view;
+	private RaumschachEventHandler view;
 
-	public TimedEvent (GameEvent event, RaumschachView view) {
+	public TimedEvent (GameEvent event, RaumschachEventHandler view) {
 		this.event = event;
 		this.view = view;
 	}
