@@ -1,8 +1,11 @@
 package raumschach.view;
 
+import java.io.File;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.awt.event.ComponentListener;
 import java.awt.event.ComponentEvent;
 import java.util.Date;
@@ -10,11 +13,13 @@ import javax.swing.JPanel;
 
 class Board3dView extends JPanel implements ComponentListener {
 
-	private float rotationZ = 0;
 	private Object3d[][][] board;
 	private SpriteList spriteList = null;
+	private int xcenter = 0;
+	private int ycenter = 0;
 	private int xoffset = 0;
 	private int yoffset = 0;
+	private int cubemed = 0;
 	private int cubesize = 0;
 	private boolean hidden = false;
 
@@ -68,7 +73,7 @@ class Board3dView extends JPanel implements ComponentListener {
 		projected[0] = ((position[1]/2f)-1f) * scale;
 		projected[1] = -((position[0]/2f)-1f) * scale;
 
-		sprite = new Sprite (obj.getScaledImage ((int) (scale*cubesize/2), 0), (projected[0]), (projected[1]));
+		sprite = new Sprite (obj.getScaledImage ((int) (scale*cubemed/2), 0), (projected[0]), (projected[1]));
 
 		return sprite;
 	}
@@ -79,14 +84,10 @@ class Board3dView extends JPanel implements ComponentListener {
 		for (int i = 0; i < spriteList.size(); i++) {
 			sprite = spriteList.get (i);
 			g.drawImage (sprite.getImage(),
-				(int) ((sprite.getX () * this.cubesize) + this.xoffset - sprite.getWidth ()/2),
-				(int) ((sprite.getY () * this.cubesize) + this.yoffset - sprite.getHeight ()/2),
+				(int) ((sprite.getX () * this.cubemed) + this.xcenter - sprite.getWidth ()/2),
+				(int) ((sprite.getY () * this.cubemed) + this.ycenter - sprite.getHeight ()/2),
 				null);
 		}
-	}
-
-	private float[] rotate (float[] point, float[] pivot, double angle) {
-		return null;
 	}
 
 	private void calculateScale () {
@@ -95,9 +96,12 @@ class Board3dView extends JPanel implements ComponentListener {
 		int max;
 
 		max = (width > height)? height: width;
-		this.cubesize = (int) (max * 0.4f);
-		this.xoffset = width / 2;
-		this.yoffset = height / 2;
+		this.cubemed = (int) (max * 0.4f);
+		this.cubesize = max;
+		this.xcenter = width / 2;
+		this.ycenter = height / 2;
+		this.xoffset = (cubesize - width)/2;
+		this.yoffset = (cubesize - height)/2;
 	}
 
 	@Override
@@ -118,5 +122,6 @@ class Board3dView extends JPanel implements ComponentListener {
 	@Override
 	public void componentShown (ComponentEvent e) {
 		this.hidden = false;
+		this.calculateScale ();
 	}
 }

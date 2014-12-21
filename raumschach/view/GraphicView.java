@@ -2,6 +2,7 @@ package raumschach.view;
 import raumschach.event.GameEvent;
 import raumschach.event.PieceEvent;
 import raumschach.event.MoveEvent;
+import raumschach.controller.PlayerControl;
 import raumschach.event.RaumschachEventHandler;
 import java.lang.Thread;
 import java.awt.BorderLayout;
@@ -21,6 +22,7 @@ public class GraphicView implements RaumschachEventHandler {
 	private BoardLayerView[] planes;
 	private Board3dView proj3d;
 	private Repainter repainter;
+	private GraphicInputHandler inputHandler;
 
 	@Override
 	public void handleEvent (GameEvent event) {
@@ -95,7 +97,19 @@ public class GraphicView implements RaumschachEventHandler {
 		this.repainter.start ();
 	}
 
-	private void message (String msg) {
+	public void connectAsPlayer (PlayerControl control, boolean color) {
+		if (this.inputHandler == null) {
+			this.inputHandler = new GraphicInputHandler (this.board);
+			for (int i = 0; i < 5; i++) {
+				this.planes[i].setClickInterpreter (this.inputHandler);
+			}
+		}
+
+		assert (control != null);
+		this.inputHandler.attachControl (control, color);
+	}
+
+	public void message (String msg) {
 		System.out.println (msg);
 	}
 }

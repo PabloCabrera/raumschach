@@ -3,15 +3,21 @@ package raumschach.view;
 import java.io.File;
 import java.lang.Math;
 import java.util.Date;
+import java.awt.AWTEvent;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.AlphaComposite;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-class BoardLayerView extends JPanel {
+
+class BoardLayerView extends JPanel implements MouseListener {
+
+	/* Static */
 	private static BufferedImage[] imgBoard;
 	private static int CELL_WIDTH = 20;
 	private static int CELL_HEIGHT = 20;
@@ -42,8 +48,10 @@ class BoardLayerView extends JPanel {
 
 	}
 
+	/* Instance members */
 	Object3d[][][] board;
 	int layer;
+	GraphicInputHandler clickInterpreter = null;
 
 	public BoardLayerView (Object3d[][][] board, int layer) {
 		this.board = board;
@@ -51,10 +59,15 @@ class BoardLayerView extends JPanel {
 		this.setPreferredSize (new Dimension (100, 100));
 	}
 
+	public void setClickInterpreter (GraphicInputHandler interpreter) {
+		this.enableEvents (AWTEvent.MOUSE_EVENT_MASK);
+		this.addMouseListener (this);
+		this.clickInterpreter = interpreter;
+	}
+
 	@Override
 	public void paint (Graphics g) {
 		g.drawImage (BoardLayerView.imgBoard[this.layer], 0, 0, null);
-		/*  */
 		this.drawPieces (g); 
 	}
 
@@ -128,6 +141,49 @@ class BoardLayerView extends JPanel {
 		g.dispose();
 		// Return the image
 		return target;
+	}
+
+	@Override
+	public void mouseClicked (MouseEvent e) {
+			int x,y;
+
+			if (this.clickInterpreter != null) {
+			x = (e.getX () / BoardLayerView.CELL_WIDTH); 
+			y = 4 - (e.getY () / BoardLayerView.CELL_HEIGHT); 
+			this.clickInterpreter.notifyClick (this.layer, x, y);
+		}
+	}
+
+	@Override
+	public void mouseEntered (MouseEvent e) {
+		/* DO NOTHING */
+	}
+
+	@Override
+	public void mouseExited (MouseEvent e) {
+		/* DO NOTHING */
+	}
+
+	@Override
+	public void mousePressed (MouseEvent e) {
+			int x,y;
+
+			if (this.clickInterpreter != null) {
+			x = (e.getX () / BoardLayerView.CELL_WIDTH); 
+			y = 4 - (e.getY () / BoardLayerView.CELL_HEIGHT); 
+			this.clickInterpreter.notifyPress (this.layer, x, y);
+		}
+	}
+
+	@Override
+	public void mouseReleased (MouseEvent e) {
+			int x,y;
+
+			if (this.clickInterpreter != null) {
+			x = (e.getX () / BoardLayerView.CELL_WIDTH); 
+			y = 4 - (e.getY () / BoardLayerView.CELL_HEIGHT); 
+			this.clickInterpreter.notifyRelease (this.layer, x, y);
+		}
 	}
 
 }

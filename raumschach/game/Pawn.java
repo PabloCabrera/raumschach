@@ -28,13 +28,15 @@ class Pawn extends Piece {
 		pos = this.getPosition ();
 		moves = new ArrayList<int[]> ();
 
-		for (int axis = 0; axis < 2; axis++) {
-			proj_pos = pos.clone ();
-			proj_pos[axis] += direction;
-			if (this.board.inBounds (proj_pos)) {
-				other = this.board.getPieceAt (proj_pos);
-				if (other == null) {
-					moves.add (proj_pos);
+		for (int axis = 0; axis < 3; axis++) {
+			if (axis != 1) {
+				proj_pos = pos.clone ();
+				proj_pos[axis] += direction;
+				if (this.board.inBounds (proj_pos)) {
+					other = this.board.getPieceAt (proj_pos);
+					if (other == null) {
+						moves.add (proj_pos);
+					}
 				}
 			}
 		}
