@@ -123,6 +123,7 @@ public class Game {
 			this.board.capture (origin, destination);
 			event = new MoveEvent (GameEvent.CAPTURE, now, turn, piece.getType (), origin, destination);
 			this.sendEvent (event);
+			return true;
 		}
 
 		return false;

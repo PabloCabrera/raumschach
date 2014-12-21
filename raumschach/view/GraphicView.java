@@ -1,5 +1,6 @@
 package raumschach.view;
 import raumschach.event.GameEvent;
+import raumschach.event.PlayerEvent;
 import raumschach.event.PieceEvent;
 import raumschach.event.MoveEvent;
 import raumschach.controller.PlayerControl;
@@ -26,12 +27,19 @@ public class GraphicView implements RaumschachEventHandler {
 
 	@Override
 	public void handleEvent (GameEvent event) {
+		PlayerEvent playerEvent = null;
 		PieceEvent pieceEvent = null;
 		MoveEvent moveEvent = null;
+		boolean color = false;
 		int[] position = null;
 		int[] destination = null;
 		byte ctype = 0;
 		Object3d o3d = null;
+
+		if (event instanceof PlayerEvent) {
+			playerEvent = (PlayerEvent) event;
+			color = playerEvent.getColor ();
+		}
 
 		if (event instanceof PieceEvent) {
 				pieceEvent = (PieceEvent) event;
@@ -54,13 +62,32 @@ public class GraphicView implements RaumschachEventHandler {
 			case GameEvent.MOVE:
 				if (o3d != null) {
 
-					this.message (moveEvent.getPiecePositionAsString () + "->" + moveEvent.getDestinationAsString ());
+					this.message (moveEvent.getPiecePositionAsString () + " + " + moveEvent.getDestinationAsString ());
 					o3d.move (destination[0], destination[1], destination[2], MOVE_DURATION);
 					this.board[destination[0]][destination[1]][destination[2]] = o3d;
 					this.board[position[0]][position[1]][position[2]] = null;
 				} else {
 					this.message ("ERROR: Invalid move" + moveEvent.getPiecePositionAsString () + "->" + moveEvent.getDestinationAsString ());
 
+				}
+				break;
+
+			case GameEvent.CAPTURE:
+				if (o3d != null) {
+					this.message (moveEvent.getPiecePositionAsString () + " * " + moveEvent.getDestinationAsString ());
+					o3d.move (destination[0], destination[1], destination[2], MOVE_DURATION);
+					this.board[destination[0]][destination[1]][destination[2]] = o3d;
+					this.board[position[0]][position[1]][position[2]] = null;
+				} else {
+					this.message ("ERROR: Invalid move" + moveEvent.getPiecePositionAsString () + "->" + moveEvent.getDestinationAsString ());
+
+				}
+				break;
+
+
+			case GameEvent.TURN:
+				if (this.inputHandler != null) {
+					this.inputHandler.notifyTurn (color);
 				}
 				break;
 		}

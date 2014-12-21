@@ -12,7 +12,7 @@ public class PlayerControl {
 	}
 
 	public boolean play (int[] from, int[]to) {
-		return false;
+		return game.playerPlay (this.color, from, to);
 	}
 
 	public ArrayList<int[]> validMoves (int[] from) {

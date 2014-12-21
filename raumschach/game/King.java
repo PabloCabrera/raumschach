@@ -13,19 +13,21 @@ class King extends Piece {
 		Piece other;
 		int[] pos;
 		ArrayList<int[]> moves;
+		int[] currentPosition;
 
 		moves = new ArrayList<int[]> ();
+		currentPosition = this.getPosition ();
 
 		for (int z = -1; z < 2; z++) {
 		for (int x = -1; x < 2; x++) {
 		for (int y = -1; y < 2; y++) {
-			if (this.board.inBounds (z, x, y)) {
-				other = this.board.getPieceAt (z, x, y);
+			pos = new int[3];
+			pos[0] = z + currentPosition[0];
+			pos[1] = x + currentPosition[1];
+			pos[2] = y + currentPosition[2];
+			if (this.board.inBounds (pos)) {
+				other = this.board.getPieceAt (pos);
 				if (other == null) {
-					pos = new int[3];
-					pos[0] = z;
-					pos[1] = x;
-					pos[2] = y;
 					moves.add (pos);
 				}
 			}
@@ -37,22 +39,24 @@ class King extends Piece {
 	public ArrayList<int[]> getValidCaptures () {
 		Piece other;
 		int[] pos;
+		int[] currentPosition;
 		ArrayList<int[]> captures;
 
 		captures = new ArrayList<int[]> ();
+		currentPosition = this.getPosition ();
 
 		for (int z = -1; z < 2; z++) {
 		for (int x = -1; x < 2; x++) {
 		for (int y = -1; y < 2; y++) {
-			if (this.board.inBounds (z, x, y)) {
-				other = this.board.getPieceAt (z, x, y);
+				pos = new int[3];
+				pos[0] = z + currentPosition [0];
+				pos[1] = x + currentPosition [1];
+				pos[2] = y + currentPosition [2];
+				if (this.board.inBounds (pos)) {
+				other = this.board.getPieceAt (pos);
 				if ((other != null)
 				 && (other.getColor () != this.color)) {
-					pos = new int[3];
-					pos[0] = z;
-					pos[1] = x;
-					pos[2] = y;
-					captures.add (pos);
+				captures.add (pos);
 				}
 			}
 		}}}

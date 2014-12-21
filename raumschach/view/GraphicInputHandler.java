@@ -45,45 +45,48 @@ class GraphicInputHandler {
 		Object3d obj;
 		Piece3d piece;
 		ValidMove3d indicator;
+		int[] destination;
+		destination = new int[3];
+		destination[0] = z;
+		destination[1] = x;
+		destination[2] = y;
 
-		System.out.println ("PRESSED " + z + ", " + x + ", " + y);
 		if (this.isTurn ()) {
-			System.out.println ("OK");
 			obj = this.board[z][x][y];
 
 			if (obj == null) {
-				this.clearIndicators ();
-				System.out.println ("EMPTY CELL");
+				/* EMPTY INVALID MOVE CELL */
 				this.selected = null;
-			} else if (obj instanceof ValidMove3d) {
 				this.clearIndicators ();
-				System.out.println ("VALID MOVE CELL");
-				commandPlay (null, null); //ESCRIBIR!
+			} else if (obj instanceof ValidMove3d) {
+				/* EMPTY VALID MOVE CELL */
+				this.clearIndicators ();
+				commandPlay (selectedPos, destination);
 			} else if (obj instanceof Piece3d) {
-				System.out.println ("BUSY CELL");
+				/* BUSY CELL */
 				piece = (Piece3d) obj;
 				if (this.turnColor (piece.getColor ())) {
+					/* OWN PIECE */
 					this.clearIndicators ();
-					System.out.println ("OWN PIECE");
 					this.selected = piece;
 					this.selectedPos[0] = z;
 					this.selectedPos[1] = x;
 					this.selectedPos[2] = y;
 					this.createIndicators (z, x, y);
 				} else if (piece.isCapturable ()) {
+					/* ENEMY CAPTURABLE PIECE */
 					this.clearIndicators ();
-					System.out.println ("CAPTURABLE PIECE");
-					commandPlay (null, null); //ESCRIBIR!
+					commandPlay (selectedPos, destination);
 				} else {
+					/* ENEMY NON-CAPTURABLE PIECE  */
+					this.selected = null;
 					this.clearIndicators ();
-					System.out.println ("ENEMY PIECE");
 				} 
 			}
 		}
 	}
 
 	public void notifyRelease (int z, int x, int y) {
-		System.out.println ("RELEASED " + z + ", " + x + ", " + y);
 	}
 
 	public void clearIndicators () {
@@ -153,6 +156,13 @@ class GraphicInputHandler {
 
 
 	private void commandPlay (int[] origin, int [] destination) {
+		if (isTurn ()) {
+			int player = this.getPlayerTurn ();
+			this.controls[player].play (origin, destination);
+		} else {
+			clearIndicators ();
+			this.selected = null;
+		}
 	}
 
 	private boolean isTurn () {

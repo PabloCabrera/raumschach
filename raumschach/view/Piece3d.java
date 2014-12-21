@@ -1,7 +1,9 @@
 package raumschach.view;
+import raumschach.game.Piece;
 import raumschach.event.GameEvent;
 import java.awt.image.BufferedImage;
 import java.awt.Image;
+import java.awt.Graphics2D;
 import java.io.File;
 import java.io.IOException;
 import java.lang.Math;
@@ -13,6 +15,7 @@ class Piece3d extends Object3d {
 	public final static int SPRITE3D_ANGLES = 60;
 	private static BufferedImage[] pieceImages;
 	private static BufferedImage[] img3dSets; 
+	private static BufferedImage imgCapture3d;
 	private static String[] pieceNames = {
 		"",
 		"pawn_white",
@@ -60,6 +63,15 @@ class Piece3d extends Object3d {
 				}
 			}
 		}
+
+		filename = GraphicView.imagePath + "capturable3d.png";
+		try {
+			Piece3d.imgCapture3d = ImageIO.read (new File (filename));
+		} catch (Exception e) {
+			System.out.println ("Couldn't load capture3D image for " + filename);
+			System.out.println ("Exception: " + e.getMessage ());
+		}
+
 	}
 
 	private byte ctype;
@@ -94,6 +106,33 @@ class Piece3d extends Object3d {
 		this.capturable = false;
 	}
 
+	@Override
+	public Image getScaledImage (int height, double angle) {
+		BufferedImage tmp;
+		BufferedImage scaled = null;
+		int index;
+		int offset;
+
+		/* We still haven't view rotation. Piece rotation will be fixed */
+		switch (this.getType ()) {
+			case Piece.KNIGHT:
+				index = 22;
+				break;
+			case Piece.EINHORN:
+				index = 22;
+				break;
+			case Piece.BISHOP:
+				index = 5;
+				break;
+			default:
+				index = 0;
+		}
+
+		offset = this.getSpriteWidth () * index;
+		tmp = this.get3DSet().getSubimage (offset, 0, this.getSpriteWidth (), this.getSpriteHeight());
+
+		return tmp.getScaledInstance ((Piece3d.SPRITE3D_WIDTH*height)/Piece3d.SPRITE3D_HEIGHT, height, Image.SCALE_FAST);
+	}
 
 	@Override
 	public BufferedImage getImage2D () {
