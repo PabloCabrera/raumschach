@@ -22,6 +22,25 @@ public class Board {
 		return this.cells[pos[0]][pos[1]][pos[2]];
 	}
 
+	public King getKing (boolean color) {
+		Piece piece;
+
+		for (int z = 0; z < 5; z++) {
+			for (int x = 0; x < 5; x++) {
+				for (int y = 0; y < 5; y++) {
+					piece = this.getPieceAt (x, y, z);
+					if ((piece != null)
+					  && (piece.getType () == Piece.KING)
+					  && (piece.getColor () == color)
+					) {
+						return (King) piece;
+					}
+				}
+			}
+		}
+		return null;
+	}
+
 	public void setLayout (byte[][][] snapshot) {
 		/* Crea las piezas en su posicion inicial */
 		Piece piece;

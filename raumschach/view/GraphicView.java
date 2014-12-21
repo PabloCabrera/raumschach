@@ -90,6 +90,10 @@ public class GraphicView implements RaumschachEventHandler {
 					this.inputHandler.notifyTurn (color);
 				}
 				break;
+
+			case GameEvent.CHECK:
+				this.message ("Check!");
+				break;
 		}
 	}
 

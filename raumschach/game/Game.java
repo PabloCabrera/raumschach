@@ -1,5 +1,6 @@
 package raumschach.game;
 import raumschach.game.Piece;
+import raumschach.game.King;
 import raumschach.event.GameEvent;
 import raumschach.event.PlayerEvent;
 import raumschach.event.PieceEvent;
@@ -74,12 +75,22 @@ public class Game {
 			p = this.board.getPieceAt (origin);
 			if ((p != null) && (p.getColor () == player)) {
 				if (this.play (origin, destination)) {
+					this.tryCheck (!player);
 					this.changeTurn ();
 					return true;
 				}
 			}
 		}
 		return false;
+	}
+
+	public void tryCheck (boolean player) {
+		King king;
+
+		king = this.board.getKing (player);
+		if ((king != null) && (king.isChecked ())) {
+			this.notifyCheck (player);
+		}
 	}
 
 	public ArrayList<int[]> getValidMoves (int[] origin) {
@@ -170,6 +181,14 @@ public class Game {
 				}
 			}
 		}
+	}
+
+	private void notifyCheck (boolean color) {
+		PlayerEvent event;
+		long now = (new Date ()).getTime ();
+
+		event = new PlayerEvent (GameEvent.CHECK, now, color);
+		this.sendEvent (event);
 	}
 
 	private void sendEvent (GameEvent event) {

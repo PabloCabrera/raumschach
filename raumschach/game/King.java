@@ -1,5 +1,7 @@
 package raumschach.game;
 import java.util.ArrayList;
+import java.util.ListIterator;
+import java.util.Arrays;
 
 class King extends Piece {
 	public King (Board board, boolean color) {
@@ -61,6 +63,31 @@ class King extends Piece {
 			}
 		}}}
 		return captures;
+	}
+
+	public boolean isChecked () {
+		Piece other;
+		ArrayList<int[]> otherCaptures;
+		ListIterator<int[]> it;
+		int[] capturePos;
+
+		for (int z = 0; z < 5; z++) {
+		for (int x = 0; x < 5; x++) {
+		for (int y = 0; y < 5; y++) {
+			other = this.board.getPieceAt (z, x, y);
+			if ((other != null)
+			 && (other.getColor () != this.color)) {
+				otherCaptures = other.getValidCaptures ();
+				it = otherCaptures.listIterator ();
+				while (it.hasNext ()) {
+					capturePos = it.next ();
+					if (Arrays.equals (capturePos, this.getPosition ())) {
+						return true;
+					}
+				}
+			}
+		}}}
+		return false;
 	}
 
 
